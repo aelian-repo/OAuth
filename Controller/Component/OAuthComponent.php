@@ -398,9 +398,9 @@ class OAuthComponent extends Component implements IOAuth2Storage, IOAuth2Refresh
  * @return mixed array of client credentials if valid, false if not
  */
 	public function checkClientCredentials($client_id, $client_secret = null) {
-		$conditions = array('client_id' => $client_id);
+		$conditions = array('Client.client_id' => $client_id);
 		if ($client_secret) {
-			$conditions['client_secret'] = $client_secret;
+			$conditions['Client.client_secret'] = $client_secret;
 		}
 		$client = $this->Client->find('first', array(
 			'conditions' => $conditions,
@@ -409,6 +409,7 @@ class OAuthComponent extends Component implements IOAuth2Storage, IOAuth2Refresh
 		if ($client) {
 			return $client['Client'];
 		};
+
 		return false;
 	}
 
@@ -576,7 +577,7 @@ class OAuthComponent extends Component implements IOAuth2Storage, IOAuth2Refresh
  */
 	public function getAuthCode($code) {
 		$authCode = $this->AuthCode->find('first', array(
-			'conditions' => array('code' => $code),
+			'conditions' => array('AuthCode.code' => $code),
 			'recursive' => -1
 		));
 		if ($authCode) {

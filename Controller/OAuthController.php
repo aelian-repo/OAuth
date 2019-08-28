@@ -49,72 +49,25 @@ class OAuthController extends OAuthAppController {
  *
  */
 	public function authorize() {
-		if (!$this->Auth->loggedIn()) {
-			$this->redirect(array('action' => 'login', '?' => $this->request->query));
-		}
-
-		if ($this->request->is('post')) {
-			$this->validateRequest();
-
-			$userId = $this->Auth->user('id');
-
-			if ($this->Session->check('OAuth.logout')) {
-				$this->Auth->logout();
-				$this->Session->delete('OAuth.logout');
-			}
-
-			//Did they accept the form? Adjust accordingly
-			$accepted = $this->request->data['accept'] == 'Yep';
-			try {
-				$this->OAuth->finishClientAuthorization($accepted, $userId, $this->request->data['Authorize']);
-			} catch (OAuth2RedirectException $e) {
-				$e->sendHttpResponse();
-			}
-		}
-
+		$authorization = false;
 		// Clickjacking prevention (supported by IE8+, FF3.6.9+, Opera10.5+, Safari4+, Chrome 4.1.249.1042+)
+		$this->OAuth->setVariable('auth_code_lifetime', 180);
+		$this->OAuth->setVariable('access_token_lifetime', 180);
 		$this->response->header('X-Frame-Options: DENY');
-
-		if ($this->Session->check('OAuth.params')) {
-				$OAuthParams = $this->Session->read('OAuth.params');
-				$this->Session->delete('OAuth.params');
-		} else {
-			try {
-				$OAuthParams = $this->OAuth->getAuthorizeParams();
-			} catch (Exception $e){
-				$e->sendHttpResponse();
+		try {
+			$OAuthParams = $this->OAuth->getAuthorizeParams();
+		} catch (Exception $e){
+			$e->sendHttpResponse();
+		}
+		if (!empty($OAuthParams)) {
+			$clientCredencials = $this->OAuth->checkClientCredentials($OAuthParams['client_id']);
+			list($redirectUri, $authorization) = $this->OAuth->getAuthResult($clientCredencials, $clientCredencials['user_id'], $OAuthParams);
+			if (!empty($authorization['query']['code'])) {
+				$authorization = $authorization['query'];
 			}
 		}
-		$this->set(compact('OAuthParams'));
-	}
 
-/**
- * Example Login Action
- *
- * Users must authorize themselves before granting the app authorization
- * Allows login state to be maintained after authorization
- *
- */
-	public function login () {
-		$OAuthParams = $this->OAuth->getAuthorizeParams();
-		if ($this->request->is('post')) {
-			$this->validateRequest();
-
-			//Attempted login
-			if ($this->Auth->login()) {
-				//Write this to session so we can log them out after authenticating
-				$this->Session->write('OAuth.logout', true);
-
-				//Write the auth params to the session for later
-				$this->Session->write('OAuth.params', $OAuthParams);
-
-				//Off we go
-				$this->redirect(array('action' => 'authorize'));
-			} else {
-				$this->Session->setFlash(__('Username or password is incorrect'), 'default', array(), 'auth');
-			}
-		}
-		$this->set(compact('OAuthParams'));
+		$this->set(array('authorization' => $authorization, '_serialize' => 'authorization'));
 	}
 
 /**
@@ -145,19 +98,6 @@ class OAuthController extends OAuthAppController {
 		} catch (OAuth2ServerException $e) {
 			$e->sendHttpResponse();
 		}
-	}
-
-/**
- * Quick and dirty example implementation for protecetd resource
- *
- * User accesible via $this->OAuth->user();
- * Single fields avaliable via $this->OAuth->user("id");
- *
- */
-	public function userinfo() {
-		$this->layout = null;
-		$user = $this->OAuth->user();
-		$this->set(compact('user'));
 	}
 
 /**

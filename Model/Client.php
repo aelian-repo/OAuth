@@ -43,13 +43,13 @@ class Client extends OAuthAppModel {
 			'isUnique' => array(
 				'rule' => array('isUnique'),
 			),
-			'notempty' => array(
-				'rule' => array('notempty'),
+			'notBlank' => array(
+				'rule' => array('notBlank'),
 			),
 		),
 		'redirect_uri' => array(
-			'notempty' => array(
-				'rule' => array('notempty'),
+			'notBlank' => array(
+				'rule' => array('notBlank'),
 			),
 		),
 	);
@@ -132,7 +132,7 @@ class Client extends OAuthAppModel {
 		 * in case you have additional fields in the clients table such as name, description etc
 		 * and you are using $data['Client']['name'], etc to save
 		 **/
-		if (is_array($data['Client'])) {
+		if (!empty($data['Client']) && is_array($data['Client'])) {
 			$this->data['Client'] = array_merge($data['Client'], $this->data['Client']);
 		}
 
