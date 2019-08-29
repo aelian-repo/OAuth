@@ -20,23 +20,27 @@ class OAuthController extends OAuthAppController {
 
 	public $components = array('OAuth.OAuth', 'Auth', 'Session', 'Security');
 
-	public $uses = array('Users');
-
-	public $helpers = array('Form');
-
-	private $blackHoled = false;
-
 /**
  * beforeFilter
  *
  */
 	public function beforeFilter() {
 		parent::beforeFilter();
-		$this->OAuth->authenticate = array('fields' => array('username' => 'email'));
 		$this->Auth->allow($this->OAuth->allowedActions);
-		$this->Security->blackHoleCallback = 'blackHole';
 	}
 
+/**
+ * Inclui novo client 
+ *  
+ */	
+	public function add($userId = null) {
+        $client = $this->OAuth->Client->add(
+			array('Client' => array('redirect_uri' => 'localhost', 'user_id' => $userId))
+		);
+        pr($client);
+        exit;
+	}
+	
 /**
  * Example Authorize Endpoint
  *
@@ -51,8 +55,7 @@ class OAuthController extends OAuthAppController {
 	public function authorize() {
 		$authorization = false;
 		// Clickjacking prevention (supported by IE8+, FF3.6.9+, Opera10.5+, Safari4+, Chrome 4.1.249.1042+)
-		$this->OAuth->setVariable('auth_code_lifetime', 180);
-		$this->OAuth->setVariable('access_token_lifetime', 180);
+		$this->OAuth->setVariable('auth_code_lifetime', 60);
 		$this->response->header('X-Frame-Options: DENY');
 		try {
 			$OAuthParams = $this->OAuth->getAuthorizeParams();
@@ -93,49 +96,11 @@ class OAuthController extends OAuthAppController {
  */
 	public function token() {
 		$this->autoRender = false;
+		$this->OAuth->setVariable('access_token_lifetime', 60);
 		try {
 			$this->OAuth->grantAccessToken();
 		} catch (OAuth2ServerException $e) {
 			$e->sendHttpResponse();
-		}
-	}
-
-/**
- * Blackhold callback
- *
- * OAuth requests will fail postValidation, so rather than disabling it completely
- * if the request does fail this check we store it in $this->blackHoled and then
- * when handling our forms we can use $this->validateRequest() to check if there
- * were any errors and handle them with an exception.
- * Requests that fail for reasons other than postValidation are handled here immediately
- * using the best guess for if it was a form or OAuth
- *
- * @param string $type
- */
-	public function blackHole($type) {
-		$this->blackHoled = $type;
-
-		if ($type != 'auth') {
-			if (isset($this->request->data['_Token'])) {
-				//Probably our form
-				$this->validateRequest();
-			} else {
-				//Probably OAuth
-				$e = new OAuth2ServerException(OAuth2::HTTP_BAD_REQUEST, OAuth2::ERROR_INVALID_REQUEST, 'Request Invalid.');
-				$e->sendHttpResponse();
-			}
-		}
-	}
-
-/**
- * Check for any Security blackhole errors
- *
- * @throws BadRequestException
- */
-	private function validateRequest() {
-		if ($this->blackHoled) {
-			//Has been blackholed before - naughty
-			throw new BadRequestException(__d('OAuth', 'The request has been black-holed'));
 		}
 	}
 

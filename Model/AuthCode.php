@@ -60,12 +60,6 @@ class AuthCode extends OAuthAppModel {
 		),
 	);
 
-	public $actsAs = array(
-		'OAuth.HashedField' => array(
-			'fields' => 'code',
-		),
-	);
-
 /**
  * belongsTo associations
  *

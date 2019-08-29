@@ -55,12 +55,6 @@ class RefreshToken extends OAuthAppModel {
 		),
 	);
 
-	public $actsAs = array(
-		'OAuth.HashedField' => array(
-			'fields' => 'refresh_token',
-		),
-	);
-
 /**
  * belongsTo associations
  *

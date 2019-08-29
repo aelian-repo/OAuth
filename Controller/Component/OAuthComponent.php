@@ -42,7 +42,7 @@ class OAuthComponent extends Component implements IOAuth2Storage, IOAuth2Refresh
  *
  * @var array
  */
-	protected $allowedActions = array('token', 'authorize', 'login');
+	protected $allowedActions = array('token', 'authorize', 'add');
 
 /**
  * An array containing the model and fields to authenticate users against
@@ -577,7 +577,7 @@ class OAuthComponent extends Component implements IOAuth2Storage, IOAuth2Refresh
  */
 	public function getAuthCode($code) {
 		$authCode = $this->AuthCode->find('first', array(
-			'conditions' => array('AuthCode.code' => $code),
+			'conditions' => array('code' => $code),
 			'recursive' => -1
 		));
 		if ($authCode) {

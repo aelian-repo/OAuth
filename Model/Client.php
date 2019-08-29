@@ -54,14 +54,6 @@ class Client extends OAuthAppModel {
 		),
 	);
 
-	public $actsAs = array(
-		'OAuth.HashedField' => array(
-			'fields' => array(
-				'client_secret'
-			),
-		),
-	);
-
 /**
  * hasMany associations
  *
