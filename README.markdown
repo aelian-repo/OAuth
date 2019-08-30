@@ -122,6 +122,7 @@ Chame a URL para simular a ação desejada:
 ## Pra se aprofundar
 
 Documentação adicional sobre OAuth2:
+* [iMasters](https://imasters.com.br/desenvolvimento/como-funciona-o-protocolo-oauth-2-0)
 * [Google](https://developers.google.com/accounts/docs/OAuth2) 
 * [Facebook](http://developers.facebook.com/docs/authentication/) 
 * [in the official spec](http://tools.ietf.org/html/draft-ietf-oauth-v2-23)
