@@ -31,21 +31,21 @@ class RefreshToken extends OAuthAppModel {
  */
 	public $validate = array(
 		'refresh_token' => array(
-			'notBlank' => array(
-				'rule' => array('notBlank'),
+			'notEmpty' => array(
+				'rule' => array('notEmpty'),
 			),
 			'isUnique' => array(
 				'rule' => array('isUnique'),
 			)
 		),
 		'client_id' => array(
-			'notBlank' => array(
-				'rule' => array('notBlank'),
+			'notEmpty' => array(
+				'rule' => array('notEmpty'),
 			),
 		),
 		'user_id' => array(
-			'notBlank' => array(
-				'rule' => array('notBlank'),
+			'notEmpty' => array(
+				'rule' => array('notEmpty'),
 			),
 		),
 		'expires' => array(

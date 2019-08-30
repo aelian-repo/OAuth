@@ -43,13 +43,13 @@ class Client extends OAuthAppModel {
 			'isUnique' => array(
 				'rule' => array('isUnique'),
 			),
-			'notBlank' => array(
-				'rule' => array('notBlank'),
+			'notEmpty' => array(
+				'rule' => array('notEmpty'),
 			),
 		),
 		'redirect_uri' => array(
-			'notBlank' => array(
-				'rule' => array('notBlank'),
+			'notEmpty' => array(
+				'rule' => array('notEmpty'),
 			),
 		),
 	);
