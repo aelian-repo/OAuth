@@ -136,8 +136,8 @@ class ClientController extends OAuthAppController {
     /**
      * Faz as requisições para autorização no REST Server
      */
-    private function authorizationRequest($method, $credencial) {
-        $url = Router::url('/api/v1/oauth/' . $method, true) . '?' . http_build_query($credencial);
+    private function authorizationRequest($action, $credencial) {
+        $url = Router::url('/api/v1/oauth/' . $action, true) . '?' . http_build_query($credencial);
         pr($url);
         $curl = curl_init($url);
         curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'GET');                                              

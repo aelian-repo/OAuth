@@ -34,6 +34,11 @@ class ServerController extends OAuthAppController {
          * Não utilizar o Auth porque o OAuth será utilizado no lugar
          */
         $this->Components->unload('Auth');        
+        /**
+         * Coloca o usuário associado ao Client que solicitou o recursos junto com os recursos
+         */
+        $user = $this->OAuth->user();
+        $this->resources = array_merge($this->resources, array('User' => $user));
 	}
 
     /**
