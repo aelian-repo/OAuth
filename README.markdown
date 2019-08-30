@@ -26,7 +26,7 @@ Carregue o plugin no bootstrap do app
 
 ```PHP
 CakePlugin::loadAll(array(
-	'OAuth' => array('routes' => true)
+    'OAuth' => array('routes' => true)
 ));
 ```
 
@@ -45,8 +45,9 @@ public $components = array(
 
 ### Crie Client para obter autorização
 
-Para criar um Client automaticamente, basta acessar a URL:
-* `/[APP]/api/v1/oauth/add/25`
+Para criar um Client automaticamente acesse a URL: 
+* `/[APP]/api/v1/oauth/add/[ID]`
+*(APP corresponde ao nome do seu APP e ID o ID do usuário que você quer relacionar com o Client)*
 
 Retorna:
 ```PHP
@@ -60,7 +61,7 @@ Array(
 )
 ```
 
-Ou chamar o método do Component no seu Controller:
+Ou chame o método do Component no seu Controller:
 
 ```PHP
 $client = $this->OAuth->Client->add('http://localhost');
@@ -70,7 +71,7 @@ Ao criar o Client, é gerado o *client_id* e *client_secret* que deverão ser fo
 
 ### Faça a autenticação
 
-1. Faça um GET para receber o código de Autorização
+1. Faça um GET para receber o código de Autorização:
  * `/[APP]/api/v1/oauth/authorize?response_type=code&client_id=xxxxxxx`
 
 Retorna:
@@ -80,7 +81,7 @@ Array(
 )
 ```
  
-2. Faça um GET para receber o Access Token
+2. Faça um GET para receber o Access Token utilizando o código de autorização adiquirido anteriormente:
  * `/[APP]/api/v1/oauth/token?grant_type=authorization_code&code=26f48d0bef98313499af7b527866621457bf4d8c&client_id=xxxxxxxxx&client_secret=xxxxxxxx`
 
 Retorna:
@@ -95,18 +96,18 @@ Array(
 
 ### Acesse o Recurso desejado
 
-Faça o seu GET ou POST para o recurso desejado utilizando o Access Token adquirido na autenticação
+Faça o seu GET ou POST para o recurso desejado utilizando o Access Token adquirido na autenticação:
  * `/[APP]/api/v1/meu_recurso?access_token=7b7148a96e09c549e6838e62e57f527289c3af5d`
 
 ## Exemplos
 
-Exemplos de como criar suas *Routes* do REST Server:
+* Exemplos de como criar suas *Routes* do REST Server:
 [Config/routes.php](https://github.com/aelian-repo/OAuth/blob/master/Config/routes.php)
 
-Exemplo comentado de REST Server:
+* Exemplo comentado de REST Server:
 [Controller/ServerController.php](https://github.com/aelian-repo/OAuth/blob/master/Controller/ServerController.php)
 
-Exemplo comentado de REST Client:
+* Exemplo comentado de REST Client:
 [Controller/ClientController.php](https://github.com/aelian-repo/OAuth/blob/master/Controller/ClientController.php)
 
 ### Testes para demonstrar funcionamento:
@@ -118,7 +119,7 @@ Chame a URL para simular a ação desejada:
  * `/[APP]/api/v1/client/edit/1`
  * `/[APP]/api/v1/client/delete/1`
 
-## Para se aprofundar
+## Pra se aprofundar
 
 Documentação adicional sobre OAuth2:
 * [Google](https://developers.google.com/accounts/docs/OAuth2) 
