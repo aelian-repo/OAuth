@@ -54,8 +54,8 @@ class ClientController extends OAuthAppController {
          */
         $credencial = array(
             'response_type' => 'code',
-            'client_id' => 'NWQ2Njg4MWIxNjRmNWY5', 
-            'client_secret' => '62be871736ed29ebbf1ef055b058df23400bf432'
+            'client_id' => 'NWQ3MTc1NDRjYmNlMmVk', 
+            'client_secret' => '0b8f36cf25f309b9c455c545000ee745d70d4531'
         );
         /**
          * Passo 1 - Solicita Authorization
@@ -145,6 +145,7 @@ class ClientController extends OAuthAppController {
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($curl, CURLOPT_SSLVERSION, 6);
         curl_setopt($curl, CURLOPT_TIMEOUT, 30);
         curl_setopt($curl, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);        
         $response = curl_exec($curl);

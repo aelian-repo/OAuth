@@ -15,7 +15,7 @@ class ServerController extends OAuthAppController {
         /**
          * substituir userModel pelo model que vai identificar o usuário no app. Ex: Empresa, Orgao, Singular...
          */
-        'OAuth.OAuth' => array('authenticate' => array('userModel' => 'Singular')), 
+        'OAuth.OAuth' => array('authenticate' => array('userModel' => 'Orgao')), 
         'Session', 
         'RequestHandler'
     );
