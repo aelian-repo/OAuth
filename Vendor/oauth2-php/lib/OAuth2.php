@@ -2,6 +2,10 @@
 require 'OAuth2ServerException.php';
 require 'OAuth2AuthenticateException.php';
 require 'OAuth2RedirectException.php';
+require 'vendor/autoload.php';
+			
+use \Firebase\JWT\JWT;
+
 
 /**
  * @mainpage
@@ -1007,7 +1011,6 @@ class OAuth2 {
 			"token_type" => $this->getVariable(self::CONFIG_TOKEN_TYPE),
 			"scope" => $scope
 		);
-		
 		$this->storage->setAccessToken($token["access_token"], $client_id, $user_id, time() + $this->getVariable(self::CONFIG_ACCESS_LIFETIME), $scope);
 		
 		// Issue a refresh token also, if we support them
@@ -1060,13 +1063,29 @@ class OAuth2 {
 	 * @see OAuth2::genAuthCode()
 	 */
 	protected function genAccessToken() {
-		$tokenLen = 40;
-		if (file_exists('/dev/urandom')) { // Get 100 bytes of random data
-			$randomData = file_get_contents('/dev/urandom', false, null, 0, 100) . uniqid(mt_rand(), true);
-		} else {
-			$randomData = mt_rand() . mt_rand() . mt_rand() . mt_rand() . microtime(true) . uniqid(mt_rand(), true);
-		}
-		return substr(hash('sha512', $randomData), 0, $tokenLen);
+		$privateKey = "-----BEGIN RSA PRIVATE KEY-----\n";
+		$privateKey .= "MIICXAIBAAKBgQC8kGa1pSjbSYZVebtTRBLxBz5H4i2p/llLCrEeQhta5kaQu/Rn\n";
+		$privateKey .= "vuER4W8oDH3+3iuIYW4VQAzyqFpwuzjkDI+17t5t0tyazyZ8JXw+KgXTxldMPEL9\n";
+		$privateKey .= "5+qVhgXvwtihXC1c5oGbRlEDvDF6Sa53rcFVsYJ4ehde/zUxo6UvS7UrBQIDAQAB\n";
+		$privateKey .= "AoGAb/MXV46XxCFRxNuB8LyAtmLDgi/xRnTAlMHjSACddwkyKem8//8eZtw9fzxz\n";
+		$privateKey .= "bWZ/1/doQOuHBGYZU8aDzzj59FZ78dyzNFoF91hbvZKkg+6wGyd/LrGVEB+Xre0J\n";
+		$privateKey .= "Nil0GReM2AHDNZUYRv+HYJPIOrB0CRczLQsgFJ8K6aAD6F0CQQDzbpjYdx10qgK1\n";
+		$privateKey .= "cP59UHiHjPZYC0loEsk7s+hUmT3QHerAQJMZWC11Qrn2N+ybwwNblDKv+s5qgMQ5\n";
+		$privateKey .= "5tNoQ9IfAkEAxkyffU6ythpg/H0Ixe1I2rd0GbF05biIzO/i77Det3n4YsJVlDck\n";
+		$privateKey .= "ZkcvY3SK2iRIL4c9yY6hlIhs+K9wXTtGWwJBAO9Dskl48mO7woPR9uD22jDpNSwe\n";
+		$privateKey .= "k90OMepTjzSvlhjbfuPN1IdhqvSJTDychRwn1kIJ7LQZgQ8fVz9OCFZ/6qMCQGOb\n";
+		$privateKey .= "qaGwHmUK6xzpUbbacnYrIM6nLSkXgOAwv7XXCojvY614ILTK3iXiLBOxPu5Eu13k\n";
+		$privateKey .= "eUz9sHyD6vkgZzjtxXECQAkp4Xerf5TGfQXGXhxIX52yH+N2LtujCdkQZjXAsGdm\n";
+		$privateKey .= "B2zNzvrlgRmgBrklMTrMYgm1NPcW+bRLGcwgW2PTvNM=\n";
+		$privateKey .= "-----END RSA PRIVATE KEY-----\n";
+
+		$payload = array(
+			"iat" => time(),
+		);
+
+		$accessToken = JWT::encode($payload, $privateKey, 'RS256');
+
+		return $accessToken;
 	}
 
 	/**
