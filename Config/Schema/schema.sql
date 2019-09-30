@@ -1,6 +1,6 @@
 DROP TABLE IF EXISTS `access_tokens`;
 CREATE TABLE `access_tokens` (
-  `oauth_token` varchar(40) NOT NULL,
+  `oauth_token` varchar(255) NOT NULL,
   `client_id` char(36) NOT NULL,
   `user_id` int(11) unsigned NOT NULL,
   `expires` int(11) NOT NULL,
@@ -11,7 +11,7 @@ CREATE TABLE `access_tokens` (
 
 DROP TABLE IF EXISTS `auth_codes`;
 CREATE TABLE `auth_codes` (
-  `code` varchar(40) NOT NULL,
+  `code` varchar(255) NOT NULL,
   `client_id` char(36) NOT NULL,
   `user_id` int(11) unsigned NOT NULL,
   `redirect_uri` varchar(200) NOT NULL,
@@ -33,7 +33,7 @@ CREATE TABLE `clients` (
 
 DROP TABLE IF EXISTS `refresh_tokens`;
 CREATE TABLE `refresh_tokens` (
-  `refresh_token` varchar(40) NOT NULL,
+  `refresh_token` varchar(255) NOT NULL,
   `client_id` char(36) NOT NULL,
   `user_id` int(11) unsigned NOT NULL,
   `expires` int(11) NOT NULL,
