@@ -31,26 +31,26 @@ class AuthCode extends OAuthAppModel {
  */
 	public $validate = array(
 		'code' => array(
-			'notEmpty' => array(
-				'rule' => array('notEmpty'),
+			'notBlank' => array(
+				'rule' => array('notBlank'),
 			),
 			'isUnique' => array(
 				'rule' => array('isUnique'),
 			),
 		),
 		'client_id' => array(
-			'notEmpty' => array(
-				'rule' => array('notEmpty'),
+			'notBlank' => array(
+				'rule' => array('notBlank'),
 			),
 		),
 		'user_id' => array(
-			'notEmpty' => array(
-				'rule' => array('notEmpty'),
+			'notBlank' => array(
+				'rule' => array('notBlank'),
 			),
 		),
 		'redirect_uri' => array(
-			'notEmpty' => array(
-				'rule' => array('notEmpty'),
+			'notBlank' => array(
+				'rule' => array('notBlank'),
 			),
 		),
 		'expires' => array(
